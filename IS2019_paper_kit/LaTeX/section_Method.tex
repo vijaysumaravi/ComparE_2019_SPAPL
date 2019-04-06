@@ -1,54 +1,64 @@
 
 % =====================================
-\section{Sleepiness Prediction}
+\section{Sleepiness Predictor}
 % =====================================
 
-\subsection{Utterance Representation}
-\subsubsection{i-vector}
-  
-A universal background model (UBM, \cite{dehak2011front}) with 2048 Gaussian mixtures and a 600-dimensional i-vector extractor was trained using the SRE and the Switchboard databases. Speech signals in the SLEEP database were downsampled to a sampling rate of 8 kHz to match the bandwidth of the SRE and Switchboard databases for i-vector extraction. The i-vector representation was used for MFCCs and VQual features.                                  
+\subsection{Implementation}
+As discussed in Section \ref{sec:introduction}, unexpected behaviours of the speaker or the speaking style could both introduce high degree of undesired variability in the data resulting in outliers. It is well known that outliers can cause a degradation in regression tasks~\cite{bollen1985regression} which may considerably reduce system performance. To address this issue, the training data was pre-processed to eliminate outliers.  %Improvements observed in prediction results when outlier elimination was performed was as expected. 
 
-\subsubsection{Statistics Vector}
-%which statistics
+An elliptic envelope outlier detection approach using covariance estimation was used~\cite{rousseeuw1999fast} in this paper. This method assumes Gaussian data and learns an ellipse. The covariance estimation is expected to be robust to outliers. This algorithm uses contamination factor to control the acceptable extent of variability between the outliers and the inliers of the data. The contamination factor is a representation of the proportion of outliers in the data. The outlier detector used between-frame entropy based i-vectors as features. 
 
-%We also provide a comparison of the performance of our system using i-vector representation of utterances against the performance of the same system using a statistics vector representation. 
-The statistics vector was used as a baseline utterance representation that maps the contours of the acoustic features onto a fixed dimensionality vector. Peaks, percentiles, moments, regression, temporal and modulation functionals were computed \cite{weninger2013acoustics}. The OpenSmile toolkit \cite{eyben2010opensmile} was used to compute the statistics vector. The statistics vector representation was used for  ComParE16, MFCCs, VQual and between-frames changes in entropy.
+% The effectiveness of outlier elimination was tested by comparing the performance of the predictor with and without outlier elimination. 
+% \Soo{Need to explain what contamination factor is} 
+% \Soo{We need something like this outlier elimination was followed by a sleepiness predictor. }
+
+Support vector regression (SVR) \cite{drucker1997support} was used to model the features in order to predict the degree of sleepiness.
+ %The complexity of the SVR predictor, $C$, was chosen from a range of values between $10^{-6}$ and $10^{5}$ so as to maximize the system performance on the development dataset. 
+Since, the feature sets used in this work have complementary information, we built separate models for each feature set. We then performed a system level fusion on the prediction scores obtained using individual feature sets. The final prediction was a linear combination of predictions obtained from individual features. 
+
+% \iffalse
+% \subsection{Multi-Level System}
+
+% Assessing the sleepiness of speakers as a regression problem is a challenging task since there are a total of 9 possible prediction labels with a considerable imbalance in training data for each label. As can be seen from Table \ref{tab:KSS}, rating 1 and 9 have less than half as many utterances compared to rating 3. To alleviate this data imbalance problem, we propose a multilevel prediction strategy: a 3-class classification and a regression within each class. 
+
+% \subsubsection{Level 1: Classification}
+
+% In the first level, each utterance is  classified into three classes. The classes represent low, moderate and high degrees of sleepiness. The KSS ratings of 1, 2, and 3 were considered as low;  4, 5, and 6 as moderate degrees of sleepiness and ratings 7, 8, and 9 as high degrees of sleepiness. 
+% A support vector classifier (SVC) using a radial basis function (RBF) kernel implemented in the Sklearn library was used. Similar to the single level system, the complexity parameter $C_2$ was optimized.
+
+% \subsubsection{Level 2: Regression}
+% For each of the three classes (low, moderate and high levels of sleepiness), a regressor was used to predict the KSS rating of each utterance. In this second level, a support vector regressor (SVR) from Sklearn was used. Again, the complexity parameter $C_3$
+% was optimized for maximum system performance on the development dataset for both feature sets. Score fusion was performed on two second-level systems- one developed using the voice quality features and the other, using the MFCC features. 
+% \fi
 
 
-\subsection{Data Processing}
-
-The training data was processed by eliminating the outliers prior to training the predictor. We used the Elliptic Envelope outlier detection algorithm with a contamination value of 15\%. The outlier detection system was trained on i-vector representation of between-frame changes in entropy. The contamination value was optimized for maximized performance on the development set. The effectiveness of the outlier detection system was tested by training the predictor with and without data processing. 
 
 
+\subsection{Experimental Setup}
 
-
-\subsection{System Description}
-
-In this experiment, we used the support vector machines regressor (SVR) to predict the sleepiness degree. The complexity parameter of the predictor, $C$, was chosen from a range of values between $10^{-6}$ and $10^{5}$ so as to maximize the system performance on the development dataset. Experiments were performed to compare the two types of utterance representation- i-vector and statistics vector using the feature sets described earlier. The same set of experiments were done with and without processing the training data prior to training the predictor. 
-
-Instead of the feature concatenation, we performed a score level fusion using individual features. The final prediction was a linear combination of predictions obtained from individual features. The weights for the linear combination are determined by a grid search. 
-
-
- 
- \Soo{Provide an explanation for the outlier detection module}
-
-
-\iffalse
-\subsection{Multi-Level System}
-
-Assessing the sleepiness of speakers as a regression problem is a challenging task since there are a total of 9 possible prediction labels with a considerable imbalance in training data for each label. As can be seen from Table \ref{tab:KSS}, rating 1 and 9 have less than half as many utterances compared to rating 3. To alleviate this data imbalance problem, we propose a multilevel prediction strategy: a 3-class classification and a regression within each class. 
-
-\subsubsection{Level 1: Classification}
-
-In the first level, each utterance is  classified into three classes. The classes represent low, moderate and high degrees of sleepiness. The KSS ratings of 1, 2, and 3 were considered as low;  4, 5, and 6 as moderate degrees of sleepiness and ratings 7, 8, and 9 as high degrees of sleepiness. 
-A support vector classifier (SVC) using a radial basis function (RBF) kernel implemented in the Sklearn library was used. Similar to the single level system, the complexity parameter $C_2$ was optimized.
-
-\subsubsection{Level 2: Regression}
-For each of the three classes (low, moderate and high levels of sleepiness), a regressor was used to predict the KSS rating of each utterance. In this second level, a support vector regressor (SVR) from Sklearn was used. Again, the complexity parameter $C_3$
-was optimized for maximum system performance on the development dataset for both feature sets. Score fusion was performed on two second-level systems- one developed using the voice quality features and the other, using the MFCC features. 
-\fi
-
-\subsection{Evaluation Metric}
+\subsubsection{Evaluation Metric}
 
 The task in this challenge is to assess the sleepiness of a speaker as a regression problem. Spearman's correlation coefficient ($\rho$) was used for performance evaluation \cite{schullerinterspeech}. 
-Spearman's correlation coefficient was selected among various correlation measures because it is robust. For example, the Pearson correlation coefficient measures the strength of linear relationships between the normally distributed variables ~\cite{hauke2011comparison}, but the predictions in our experiments may neither be normally distributed nor have a linear relationship. 
+Spearman's correlation coefficient was selected among various correlation measures because of the robustness of this measure. For example, the Pearson correlation coefficient measures the strength of linear relationships between normally distributed variables ~\cite{hauke2011comparison}, but the predictions in our experiments may neither be normally distributed nor have a linear relationship. 
+
+\subsubsection{Predictor Performance with Individual Feature Sets}
+
+Four different configurations for predictors using between-frame entropy, VQual or MFCCs were made: with vs. without outlier elimination, and statistics vector vs. i-vector.
+In outlier elimination, 15\% contamination was assumed based on a preliminary analysis on individual system performance. The complexity of the SVR predictor, $C$, was chosen from a range of values between $10^{-6}$ and $10^{5}$ so as to maximize the system performance on the development dataset. Then, the effects of outlier elimination and i-vector representation were analyzed to decide system configurations for individual feature sets. 
+
+
+%In order to test the effectiveness of the outlier elimination, a comparison was made between the system performance with and without the outlier elimination.
+
+A decision upon whether the outlier elimination should be used or not, 
+and another decision between using the i-vector and statistics vector representations were made by selecting the best performing system configuration for each individual feature set.
+
+
+\subsubsection{Effects of System Fusion}
+
+Using the configurations decided for individual systems, 
+the complementary effect among different features were tested by score level fusion.
+Individual systems that performed reasonably well ($\rho>0.2$) were selected.
+Then, all possible combinations were made among selected systems along with the baseline system which used ComParE16 and statistics vector representation.
+The weights for the fusion were determined by a grid search. 
+
+

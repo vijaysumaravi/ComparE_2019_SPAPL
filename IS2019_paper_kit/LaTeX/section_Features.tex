@@ -1,9 +1,9 @@
 % =====================================
-\section{Acoustic Features}
+\section{Feature Extraction and Representation}
 % =====================================
 \subsection{Voice Quality Features}
 
-The feature set used in this study, denoted as VQual, included $F_0$, $F_1$, $F_2$, $F_3$, harmonic amplitude differences $H_1$-$H_2$, $H_2$-$H_4$, $H_4$-$H_\mathrm{2k}$, formant amplitudes $A_1$, $A_2$, $A_3$, and cepstral peak prominence (CPP, [22]). Here, $H_1$, $H_2$, $H_4$, and $H_\mathrm{2k}$ indicate the amplitudes of first, second, fourth harmonics, and the harmonic nearest to 2 kHz, respectively. The first and second derivatives of these features were also used. Features were extracted using the VoiceSauce toolkit~\cite{shue2010voice}.
+The voice quality feature set used in this study, denoted as \textit{VQual}, includes the fundamental frequency ($F_0$); the first three formant frequencies ($F_1$, $F_2$, $F_3$) and their corresponding amplitudes ($A_1$, $A_2$, $A_3$); harmonic amplitude differences ($H_1$-$H_2$, $H_2$-$H_4$, $H_4$-$H_\mathrm{2k}$) that represent spectral tilt of source spectrum; and cepstral peak prominence (CPP, \cite{Hillenbrand1994}) which is a measure for inharmonic noise. Here, $H_1$, $H_2$, $H_4$, and $H_\mathrm{2k}$ indicate the amplitudes (in dB) of first, second, fourth harmonics, and the harmonic nearest to 2 kHz, respectively. The first and the second derivatives of these features were also used. Features were extracted using the VoiceSauce toolkit~\cite{shue2010voice}.
 
 % An automatic estimation algorithm is available from the VoiceSauce toolkit [18]. 
 % The first and second derivatives of these features were also used.
@@ -34,30 +34,26 @@ The feature set used in this study, denoted as VQual, included $F_0$, $F_1$, $F_
 
 \subsection{Mel-Frequency Cepstral Coefficients}
 
-Mel-frequency cepstral coefficients (MFCCs) are widely used acoustic features for classification \Amber{paralinguistic studies instead of classification}.  This feature set represents the overall spectral envelope of speech signals, and is closely related to the vocal tract shape. Physiological changes related to sleepiness might shape the vocal tract in a certain way that can be reflected in the spectral envelope. Thus, the distribution of MFCCs over an utterance might provide information about the sleepiness state \Amber{degree of sleepiness}of the speaker.
-
-MFCCs were extracted with a window size of 25 ms, a window shift of 10 ms, a pre-emphasis filter with coefficient 0.97, and a sinusoidal lifter with coefficient 22. A filter bank with 23 filters was used and 13 coefficients were extracted. We also used the first and second derivatives of MFCCs. The voice box toolkit was used to extract MFCC features~\cite{brookes1997voicebox}.
+Mel-frequency cepstral coefficients (MFCCs) are widely used acoustic features in speech processing.  %This feature set represents the overall spectral envelope of speech signals. , and is closely related to the vocal tract shape. Physiological changes due to sleepiness might shape the vocal tract in a certain way that can be reflected in the spectral envelope. Thus, the distribution of MFCCs over an utterance might provide information about the degree of sleepiness of the speaker.
+MFCCs were extracted with a window size of 25 ms, a window shift of 10 ms, a pre-emphasis filter with coefficient 0.97, and a sinusoidal lifter with coefficient 22. A filter bank with 23 filters was applied and 13 coefficients were extracted. 
+The first and the second derivatives were also used. %The voice box toolkit was used to extract MFCC features~\cite{brookes1997voicebox}.
 
 \subsection{Entropy}
 
-Entropy values between frames were calculated as described in~\cite{you2004entropy}. MFCCs were obtained from the speech signal using a Hamming window of length 25 ms and a frame shift of 2.5 ms. A 30 ms rectangular window was applied to MFCCs and using the features within the window, the signal's local entropy was computed as:
+Between-frame entropy was calculated as described in~\cite{you2004entropy}. MFCCs were obtained from the speech signal using a Hamming window of length 25 ms and a frame shift of 2.5 ms. A 30 ms rectangular window was applied to MFCCs and using the features in this window, the signal's local entropy was computed as:
 
 \begin{equation}
     H(v) = K \ln{\sqrt{2\pi}} + \ln{\Tr({\Sigma})},
 \end{equation}
-where, $H(v)$ is the entropy of the random variable $v$ of dimension $K$. $\Sigma$ is the $ K \times K $ covariance matrix of the probability distribution function of the random variable $v$.  
+where, $H(v)$ is the entropy of the random variable $v$ of dimension $K$ and $\Sigma$ is the $ K \times K $ covariance matrix of the probability distribution function of the random variable $v$.  
 
+%If an acoustic feature changes rapidly, the entropy of an acoustic feature between frames would be high. 
+%\Soo{I wrote this para without a crystal clear idea about the entropy we are using. Please read this section and correct if needed}
+The spectral variability of the speech signal is represented by entropy. Rapid information gain in the speech spectrum corresponds to high entropy. Hence, we expected between-frame entropy to correlate with instantaneous speech rate. In order to verify this hypothesis, the correlation between the number of syllables per second, a conventional speech rate measure, and the mean between-frame entropy within an utterance was calculated. Syllables per second were computed using a Praat script as described in \cite{DeJong2009}.
 
-
-If an acoustic feature changes rapidly, the entropy of an acoustic feature between frames would be high. 
-Therefore, we expected entropy can be used to represent instantaneous speech rate.
-In order to verify this hypothesis, the correlation between the number of syllables per second, a conventional speech rate measure, and the mean entropy within an utterance was calculated.
-Syllables per second was computed using a Praat script as described in \cite{DeJong2009}.
-
-The computed speech rate was highly correlated with the mean entropy of the training data, as shown in Figure~\ref{fig:entropy_rate}. The linear regression between the mean the speech rate and mean entropy resulted in $R^2=0.50$ and $p<0.001$.  The corresponding Pearson's correlation coefficient was 0.71. This high correlation provides an evidence to the hypothesis that entropy can be used to represent speech rate.
+The computed speech rate was highly correlated with the mean frame-level change in entropy for the training data, as shown in Figure~\ref{fig:entropy_rate}. The linear regression between the mean of speech rate and the mean of entropy resulted in $R^2=0.50$ and $p<0.001$.  The corresponding Pearson's correlation coefficient was 0.71. The high correlation provides evidence to the hypothesis that between-frame entropy can be used to represent speech rate.
 The unexplained variance in the linear regression might be due to the difference in information reflected in each methods.
-For example, the syllables per second measure only focuses on syllable nuclei,
-while the entropy reflects between-frame change over all frames in an utterance.
+For example, the syllables per second measure only focuses on syllable nuclei, while the between-frame entropy changes over all frames in an utterance.
 %Another possibility is in unexpected inaccuracies in the entropy and/or speech rate calculation algorithms. 
 
 
@@ -66,15 +62,28 @@ while the entropy reflects between-frame change over all frames in an utterance.
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{IS2019_paper_kit/images/scatter_train.png}
-    \caption{\label{fig:entropy_rate}Scatter plot of speech rate in terms of syllables per second vs. mean of frame level change in entropy within an utterance in the training dataset. A line was fitted using the linear regression ($R^2=0.50$, $p<0.001$).}
+    \caption{\label{fig:entropy_rate}Scatter plot of speech rate in terms of syllables per second vs. mean of frame level change in entropy within an utterance in the training dataset. A line was fitted using linear regression ($R^2=0.50$, $p<0.001$).}
 \end{figure}
 
 \subsection{ComParE16 Feature Set}
 
-As the baseline acoustic feature set, the ComParE 2016 feature set was used \cite{weninger2013acoustics}. 
-This set consists of $F_0$, energy, spectral, cepstral and voicing related frame-level features which are
-referred to as low-level descriptors (LLDs). The set also includes the zero crossing rate, jitter, shimmer, harmonic-to-noise ratio (HNR), spectral harmonicity and psychoacoustic spectral
-sharpness. In total, this feature set contains 6,373 static features resulting from the computation of various functionals over
-low-level descriptor contours. These functionals are statistical,
-polynomial regression coefficients and transformations on the
-low-level descriptors. We used the TUMs open-source openSMILE system to extract the ComParE16 features~\cite{eyben2010opensmile} .
+%\Soo{Maybe we can mention that this feature set is considered as the baseline feature set}
+This feature set is provided as the baseline of the Interspeech 2019 Continuous Sleepiness sub-challenge. The ComParE16 feature set~\cite{weninger2013acoustics} consists of $F_0$, energy, spectral, cepstral and voicing related frame-level features. Additionally, the set includes the zero crossing rate, jitter, shimmer, harmonic-to-noise ratio (HNR), spectral harmonicity and psychoacoustic spectral sharpness. These are referred to as low-level descriptors (LLDs). The OpenSMILE toolkit was used to extract the ComParE16 features~\cite{eyben2010opensmile}.
+
+
+
+%\Soo{These are not LLDs?}. This feature set comprises of 6,373 static features resulting from the computation of various functionals
+%\Soo{`functionals' means the statistics vectors? Any utterance representation should be described in 4.1.2} 
+%over low-level descriptor contours. The functionals used are statistical functions, polynomial regression coefficients and transformations on the low-level descriptors. 
+\subsection{Utterance Representation}
+%\subsubsection{i-vector}
+  
+Two types of utterance representations were used in this study.
+First, the i-vector was used to represent the distribution of frame-level acoustic features. A universal background model (UBM, \cite{Reynolds2000}) with 2,048 Gaussian mixtures and a 600-dimensional i-vector extractor was trained using SRE and Switchboard databases. Speech signals in the SLEEP database were downsampled to a sampling rate of 8~kHz to match the bandwidth of the training databases prior to i-vector extraction. %The i-vector representation was used for MFCCs and VQual features.                                  
+
+%\subsubsection{Statistics Vector}
+%which statistics
+
+Second, 
+%We also provide a comparison of the performance of our system using i-vector representation of utterances against the performance of the same system using a statistics vector representation. 
+the statistics vector was used as a baseline utterance representation that maps the contours of the acoustic features onto a fixed dimensionality vector. Peaks, percentiles, moments, regression, temporal and modulation functionals were computed \cite{weninger2013acoustics}. The OpenSmile toolkit \cite{eyben2010opensmile} was used to compute the statistics vector. %The statistics vector representation was used for  ComParE16, MFCCs, VQual and between-frames changes in entropy.

@@ -1,8 +1,24 @@
 % =====================================
 \section{Conclusion}
 % =====================================
-This study proposes the use of voice quality features (VQual) and between-frames changes in entropy for the prediction of sleepiness degree. VQual features are related to the perceived voice quality, and changes in entropy are an indirect measure of speech rate. An i-vector system was employed to reduce speaker and phonetic variability. To address the challenge of data imbalance, a multi-level prediction system was developed. A score-level fusion was done on complimentary features. 
 
-In the single-level system, we observed a substantial gain in system performance when voice quality features were fused. In the case of multi-level system, the system performance was better when between-frame changes in entropy were used. Thus, the proposed acoustic feature set improved the performance of sleepiness prediction system. The i-vector system was an effective representation of the utterance. By implementing the i-vector representation for an utterance, we reduced variability in data arising due to factors extrinsic to speaker's degree of sleepiness. The resulted in a considerable improvement in system performance.  
+An automatic sleepiness assessment system was proposed in this study. Between-frame entropy was introduced as an instantaneous measure of speech rate. It was used to detect outlier to develop robust system. Eliminating outlier in the training samples prior to training the predictor provided a substantial performance gain regardless of the acoustic feature set and utterance representation used for the predictor.
+%Voice quality features are often associated with , and changes in entropy are an indirect measure of speech rate. An i-vector system was employed for better utterance representation. 
 
-Since the UBM was trained on an English database, it will be interesting in the future to develop a UBM on a German speech database. Developing an i-vector utterance representation for the ComParE16 features will be another important future study. 
+The i-vector framework effectively represented the feature distribution of an utterance. This is reflective in the improvement of the system performance over the baseline utterance representation using acoustic feature statistics. 
+
+Voice quality features improved system performance when fused with any system based on other feature sets, suggesting complementary effect between feature sets.
+%Thus, the proposed acoustic feature set improved the performance of the sleepiness prediction system. 
+The complete system, a fusion of individual systems based on VQual, MFCCs, and ComParE16 feature sets, outperformed the baseline system both on the development and test datasets.
+
+%To improve the robustness of the system, an outlier elimination system was implemented. A score-level fusion was applied on complimentary features. 
+
+%For individual systems, we observed a substantial gain in system performance when outliers were eliminated from the training data prior to training the predictors. 
+
+%Lastly, sleepiness prediction is a vital task in many applications and systems that can accurately estimate sleepiness from voice data will enhance the safety factor. 
+
+Although the proposed system in this paper outperformed the baseline system, there is a scope for improvement. For example, the UBM and i-vector extractor can be trained with a German speech database for a more reliable utterance representation. Using i-vector representation for ComParE16 might provide further performance gain.
+An adaptive strategy to compensate for the effects of speaking style and speaker variability would be another promising approach, considering that the influence of sleepiness on speech varies based on those factors.
+%\Soo{Speaking style}
+
+

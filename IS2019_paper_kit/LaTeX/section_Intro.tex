@@ -1,8 +1,9 @@
 \section{Introduction}
-Assessing sleepiness is crucial to monitor the level of alertness of a person in a critical mission or life-threatening activities, such as in aviation or naval missions. 
+\label{sec:introduction}
+Assessing sleepiness is crucial in monitoring the level of alertness of a person in critical missions or life-threatening activities, such as in aviation or naval missions. 
 %It can be also useful in everyday life such as a safety feature in driver-assistance systems.
 %Speech is one attribute of human behavior that can be used to measure fatigue.
-Speech signals can be effective to assess sleepiness in such situations because sleepiness is reflected in voice, and speech data can be collected unobtrusively \cite{de2019speech}.
+Speech signals can be effective to assess degree of sleepiness in such situations because sleepiness is reflected in voice, and speech data can be collected unobtrusively \cite{de2019speech}.
 %Yet, to the best of our knowledge, a reliable algorithm is not available for automatic sleepiness assessment. 
 This study aims to automatically assess the degree of sleepiness, as a participation in the Interspeech 2019 Continuous Sleepiness sub-challenge \cite{schullerinterspeech}.
 
@@ -11,25 +12,16 @@ This study aims to automatically assess the degree of sleepiness, as a participa
 %Reduced muscle tone, resulting from decreased motivation, may result in lowered fundamental frequency. Vocal errors may increase as an individual becomes less and less concerned with the formality and precision of her of his speech.
 %In addition, word duration may increase as greater amounts of time are required to prepare information for speaking.
 
-Several automatic sleepiness detection systems has been proposed.
-For example, Rahman~\etal \cite{rahman2011detecting} applied acoustic features that they proposed for emotion recognition, such as F0 contours, and used the statistics of those features to represent an utterances.
-Gaj\v{s}ek~\etal \cite{Gajsek2011} used mel-frequency cepstral coefficients (MFCCs) with the hidden Markov model (HMM).
-Krajewski and Kroger \cite{Krajewski2007} used prosodic and spectral features, suggested a features selection method to obtain vector representation.
-However, these systems focused on making a binary decision between sleepy vs. not sleepy, while the task we are focusing on in the present study is to estimate the degree of sleepiness.
-Thus, effective acoustic features and system configuration for the current task might be different. 
-%\Soo{What were their limitations? Does our system have an advantage over those? }
+Several automatic sleepiness detection systems have been proposed. For example, Rahman~\etal~\cite{rahman2011detecting} applied acoustic features such as $F_0$ contours for assessing sleepiness, and used the statistics of those features to represent an utterance. Gaj\v{s}ek~\etal~\cite{gajvsek2011university} used mel-frequency cepstral coefficients (MFCCs) with the hidden Markov model (HMM). Krajewski and Kroger~\cite{Krajewski2007} used prosodic and spectral features and suggested a feature selection method to obtain the vector representation.
+While these systems focused on binary classification between sleepy and not sleepy, the task in the current study is to estimate the degree of sleepiness. Thus, the effective acoustic features and system configuration might be different.
 
-When an individual is deprived of sleep and fatigued, the resulting cognitive-physiological changes can influence voice production system.
-%\Soo{ There was a paper describing how things in the speech chain are affected\cite{}}.
-Potential acoustic changes in speech induced by sleepiness were summarized by Krajewski \etal \cite{krajewski2009acoustic}. 
-For example, cognitive speech planning ability and speed is reduced, which might result in slowed speech;
-muscle tension decreases, which might lead to a lower fundamental frequency ($F_0$), lower formant frequency positions and broader formant bandwidths.
-In that study, it was reported that $F_0$, and the first formant frequency were lower for the sleepy speech than were for the alert speech sample.
+When an individual is deprived of sleep and fatigued, the resulting cognitive-physiological changes can influence voice production. For example, sleepiness reduces the cognitive speech planning ability and speed, which might result in slowed speech;
+muscle tension decreases, which might lead to a lower fundamental frequency ($F_0$), lower formant frequency positions and broader formant bandwidths. Potential acoustic changes in speech induced by sleepiness were summarized by Krajewski~\etal~\cite{krajewski2009acoustic}. In that study, it was reported that $F_0$, and the first formant frequency were lower for the sleepy speech than for the alert speech sample.
 %Empirical results supporting these possibilities were presented in various studies.
 %In \cite{whitmore1996speech}, it was found that F0 and word duration were correlated with fatigue measures. 
 %These results suggest that acoustic correlates with sleepiness exist, and sleepiness can be automatically assessed with speech signal.  
 %\Soo{Are these good features for regression?}
-A systematic analysis on the effect of 
+A series of analysis on the effects of sustained wakefulness on speech found that various aspects of speech, including speaking rate, $F_0$ variation and the spectral tilt of the source spectrum were sensitive to sleepiness \cite{Vogel2011}.
 
 \iffalse
 For example, by analyzing read sentences, Greely~\etal~\cite{Greeley2007} found that certain phones in human speech show temporal and spectral variations as a function of speaker's fatigue. 
@@ -38,39 +30,32 @@ This study analyzed both read and spontaneous speech.
 \Soo{Could you give more details about these studies?}
 \fi
 
-
-
-
-In this study, two feature sets are proposed to assess sleepiness: voice quality and between-frame changes in entropy. 
+In this study, two feature sets are proposed to assess sleepiness: voice quality and between-frame entropy. 
 The first feature set was inspired by a psycho-acoustic model of voice quality \cite{Kreiman2014, Garellek2016}. %The model describes voice quality with acoustic parameters including the fundamental frequency (F0), harmonic-to-noise ratio, and differences in harmonic amplitudes. 
 %  \Soo{Need some justification to use voice quality: is it related to sleepiness or fatigue?}
 %Extensive studies (e.g., \cite{}) have shown that listeners are perceptually sensitive to these features.\Soo{Do we have a link between perceptually valid voice quality to sleepiness degree?} 
-This feature set was used to represent speakers' identity, and effectively improved automatic speaker verification performance \cite{kreiman2015relationship, Park2016, Park2017, Park2018JASA}.
-Furthermore, it was effective in affect classification \cite{Park2018IS} and depression detection \cite{afshan2018effectiveness}.
-The potential acoustic features that can represent sleepiness introduced earlier overlaps with this feature set,
-such as, $F_0$, formant frequencies, formant bandwidths, harmonic amplitude, and inharmonic noise.
-Indeed, voice quality is often associated with sleepiness and fatigue \cite[Chap. 9]{Kreiman2011}. 
-The second feature was used as an instantaneous measure of speech rate, which is also often associated with sleepiness.
-Entropy is large when an acoustic feature varies rapidly between frames. In this sense, entropy can reflect frame by frame speech rate information. Its distribution within an utterance might provide more detailed representation than the number of syllables per second, which is only one number per utterance. %\Soo{Motivation for i-vector approach and multi-level prediction}
+This feature set effectively represented speakers' identity \cite{kreiman2015relationship, Park2016, Park2017, Park2018JASA} and emotional/psychological state \cite{Park2018IS, afshan2018effectiveness}.
+This set might also be effective in representing sleepiness; in that the acoustic features, such as $F_0$, formant frequencies, formant bandwidths, source spectral tilt, and inharmonic noise, often associated with sleepiness, overlap with this feature set.
+%Indeed, voice quality is often associated with sleepiness and fatigue \cite[Chap. 9]{Kreiman2011}. 
+The second feature, between-frame entropy was used as an instantaneous measure of speech rate which is also often associated with sleepiness.
+Entropy is large when the spectral characteristics vary rapidly between frames. In this sense, between-frame entropy can be assumed to reflect instantaneous speech rate. 
+Because it is computed at the frame level, it might provide information about the speaking rate with high time resolution. 
 
-
-For utterance representation, the i-vector framework \cite{dehak2011front} is utilized in this study. 
-In this framework, each utterance is represented with a Gaussian mixture model representing the feature distribution within an utterance. The mixture model is often adapted from the universal background model (UBM), which is a statistical model for speech sounds, usually trained with a large amount of recordings from a large number of speakers. Then, the the mean vectors of the adapted mixture model are concatenated, and the concatenated vector is decomposed to a low dimensional representation. This low dimensional representation is called the i-vector.
-Because the i-vector effectively summarize the feature distribution of an utterance, it has been widely used in various speech processing applications, including automatic speaker verification \cite{Hansen2015}.
+For utterance representation, the i-vector framework \cite{dehak2011front} is utilized in this study. In this framework, each utterance is represented with a Gaussian mixture model (GMM) representing the feature distribution within an utterance. The GMM is often adapted from a universal background model (UBM), a statistical model for speech sounds, usually trained on a larger data corpus. The mean vectors of the adapted mixture model are concatenated and decomposed to a low dimensional representation. This low dimensional representation is called the i-vector.
+Because the i-vector effectively summarizes the feature distribution of an utterance, it has been widely used in various speech processing applications, including automatic speaker verification \cite{Hansen2015}.
 %The i-vector framework is most effective when a large database including a wide range of affect and speaker variability is available. Consid- ering that the available amount of data was limited to train both the UBM and the i-vector subspaces, we decided to directly use supervectors
 %By summarizing the feature distribution in an utterance, an i-vector successfully represents an utterance as a fixed-length vector. 
 
 %To mitigate the problem of data imbalance, a multi-level prediction system is proposed involving both classification and regression. 
 
 %There might be some speakers who have different acoustic characteristics of sleepiness from general trend. \Soo{Maybe a reference available? }
-Additionally, we applied an outlier detection prior to the training of the sleepiness prediction system.
+Additionally, an outlier elimination is applied prior to training the sleepiness prediction system.
 %Although typical symptoms exist for sleepiness, there is a difference between individuals.
 It has been noted that the effect of sleepiness on speech is highly idiosyncratic, and speech task-specific \cite{Greeley2007, Vogel2011}.
 High degree of fatigue might also result in an unexpected behavior that does not necessarily represent sleepiness.
-If some speech samples have considerably different characteristics from the others, they might make it difficult for the system to learn a general pattern.
-\Soo{For example, speaker's gender influenced the \cite{Honig2014}}
+If some speech samples have considerably different characteristics from others, they might make it difficult for the system to learn a general pattern.
 %If some subjects have considerably different sleepiness  from the others, that might prevent the prediction system from discovering a general pattern during the training.
-In this context, detecting and filtering out outliers in the training dataset was applied to improve the system robustness. \Soo{Abstract should be revised accordingly} 
+In this context, detecting and filtering out outliers in the training dataset was applied to improve the system robustness.  
 
 The rest of the paper is organized as follows. In Section 2, the databases used in this study are described. The proposed acoustic features to represent sleepiness, and the sleepiness prediction system are presented in Section 3 and 4, respectively. In Section 5, the experimental results are discussed. The paper concludes with future work in Section 6.
 %\subsection{Related Works}

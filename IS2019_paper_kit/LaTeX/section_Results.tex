@@ -2,86 +2,72 @@
 \section{Experimental Results}
 % ============
 
-\subsection{Single-Level System Performance}
+\subsection{Individual System Performance}
+The effectiveness of eliminating the outliers in improving the robustness of the system was analyzed. A comparison between the use of all of the training data vs using the training data after removing outliers is shown in~Table~\ref{tab:results}. The results in terms of Spearman's correlation coefficient for entropy, VQual and MFCCs are shown using both statistics vector and i-vector to represent the utterances. 
 
-System performance without outlier detection is first analyzed. A comparison of the effectiveness of the statistics vector and i-vector utterance representations is presented in Table \ref{tab:results_single_level_system}. The baseline system used ComParE16 feature set.
+% The system performance in terms of Spearman's correlation coefficient are shown in.  
+%The baseline system used ComParE16 feature set. 
 
-\begin{table}[h]
+There is a consistent improvement in system performance by eliminating outliers from the training data. For example, when statistics vectors were used as utterance representation, outlier elimination improved the $\rho$ value from 0.158 to 0.192 for MFCCs and from 0.142 to 0.178 for VQual. Similarly, in the i-vector framework, outlier elimination improved the results for MFCCs from 0.248 to 0.252 and for VQual from 0.201 to 0.221.
+Thus, the configuration with outlier elimination was selected for all individual systems.
+%It is well known that outliers can cause a degradation in regression tasks~\cite{bollen1985regression} which may considerably reduce system performance. Improvements observed in prediction results when outlier elimination was performed was as expected.  
+
+\begin{table}[b]
 \centering
 
-\caption{\label{tab:results_single_level_system}Correlation results for the development set without data processing. The best performing combination is boldfaced.}
+\caption{\label{tab:results}System performance in terms of Spearman's correlation for the development set using both statistics vector and i-vector representations. The results obtained after outlier elimination ($\rho_2$) are compared against the results using all of the training data ($\rho_1$). The best performing configuration for each individual feature set is boldfaced.} 
 
-\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}lc}
+\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}lcc}
 \toprule
-\textbf{Utt. representation} & \textbf{Feature set} & \textbf{ $\rho$} \\
+\textbf{Utt. representation} & \textbf{Feature set} & \bm{ $\rho_1$} &  \bm{ $\rho_2$}\\
 \midrule
 \midrule
 
-\multirow{4}{*}{Statistics vector} 
+\multirow{3}{*}{Statistics vector} 
 % & ComParE16 & \textbf{0.251} \\
-& entropy & 0.029 \\
-& VQual & 0.142 \\
-& MFCC & 0.158 \\
+& entropy & 0.029 &   0.078  \\
+& VQual & 0.142 &  0.179  \\
+& MFCC & 0.158 & 0.192   \\
  \midrule
 \multirow{3}{*}{i-vector}
-& entropy & 0.126\\
-& VQual & 0.201 \\
- & MFCC & \textbf{0.248} \\
+& entropy & 0.126 &   \textbf{0.131 } \\
+& VQual & 0.201 &  \textbf{0.221} \\
+ & MFCC & 0.248&  \textbf{0.252} \\
  \bottomrule
 \end{tabular*}%
 
 \end{table}
 
+The correlation between predicted degree and reference degree of sleepiness notably increased when the i-vector framework was used for utterance representation as compared to the statistics vector. This was observed for every acoustic feature. 
+For MFCCs, for instance, the performance improved from 0.158 to 0.248, a relative improvement of approximately 56\%. 
+When VQual features were used the improvement was around 40\% (from $\rho=0.142$ to 0.201). Therefore, the i-vector representation was chosen instead of statistics vector for each individual system.
+%This improvement could partially be due to the compensation of speaker and phonetic variability. 
+
+
+Although VQual and MFCC-based systems performed reasonably well ($\rho>0.2$) with the selected configuration, the entropy-based system did not perform as well. This could potentially be due to the varying effects of sleepiness on speech rates between read and spontaneous speech.
+It was found that speakers' sleepiness was negatively correlated with speech rate for read speech, but an opposite pattern was observed for spontaneous speech \cite{Vogel2011}.
+Unfortunately, no further analysis on the type of speech task could be made because such metadata was not available for the dataset used in this study.
 
 
 
+\subsection{Fused System Performance}
 
-Using the i-vector framework improved system performance substantially compared to using statistics vectors when the same acoustic features were used. 
-For example, when MFCCs were used, the performance improved from 0.158 to 0.248, a relative improvement of approximately 56\%. When VQual features were used the, improvement was around 40\%, from a $\rho$ value of 0.142 to 0.201. This improvement could partially be due to the compensation of speaker and phonetic variability.
+Based on the results of the individual systems, VQual and MFCC-based systems using the i-vector representation with an outlier elimination prior were selected for fusion. As mentioned earlier, the baseline system ($\rho=0.251$) using ComParE16 and statistics vector was also used for fusion.
+Table \ref{tab:results_score_fusion} presents the results for score fusion among the three individual systems. %Since outlier elimination provided better results, all experiments of score fusion were done with prior elimination of outliers in the training data.  
 
+Score fusion with VQual improved performance for all cases.
+For example, when VQual was fused with ComParE16, the $\rho$ score increased from 0.251 for ComParE16 alone to 0.283 for the fused system (a relative improvement of 12\%). %When MFFCs were fused with ComParE16, the improvement was approximately 18\%, from 0.251 to 0.296. 
+Fusing with MFCCs also improved system performance ($\rho=0.265$) when compared to the MFCC-alone system ($\rho=0.252$). 
+These results suggest that VQual provides complementary information about sleepiness to the MFCC and ComParE16 feature sets.
 
-\begin{table}[h]
-\centering
+The best performance over all combinations of individual systems was when ComParE16, MFCCs and VQual features were fused altogether, resulting in the correlation score of 0.300. Compared to the baseline system, a relative improvement of 19.5\% was achieved. This system was used as the complete system.
 
-\caption{\label{tab:results_single_level_system}Correlation results for the development set with data processing. The best performing combination is boldfaced.}
-
-\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}lc}
-\toprule
-\textbf{Utt. representation} & \textbf{Feature set} & \textbf{ $\rho$} \\
-\midrule
-\midrule
-
-\multirow{4}{*}{Statistics vector} 
-% & ComParE16 &  \textbf{0.271}\\
-& entropy & 0.078 \\
-& VQual &  0.179\\
-& MFCC &  0.192\\
- \midrule
-\multirow{3}{*}{i-vector}
-& entropy & 0.131\\
-& VQual &  0.221\\
- & MFCC &  \textbf{0.252}\\
- \bottomrule
-\end{tabular*}%
-
-\end{table}
-
- 
-
-
-
-
- The performance of a fused system was better than individual systems for both types of utterance representations. When statistics vectors were used, the score level fusion of MFCC and VQual improved the $\rho$ value from 0.158 for MFCC alone to 0.182 for the fusion system (15\% relative improvement). In case of ComParE16 features, fusing with VQual improved the $\rho$ value from 0.251 to 0.261. When i-vectors were used, the improvement in $\rho$ was from 0.248 for MFCC alone to 0.265 for the fused system (6\% relative improvement). This performance improvement with score level fusion can be explained with the complimentary nature of the feature sets. We do not report score fusion for other features since no improvement in performance was observed. We observe that across features, fusing with VQual improves results. 
-
- When between-frame changes in entropy is used in the single-level system the system performance is low. This might be potentially due the reason that 
- \Soo{You can refer to \cite{Vogel2011} that speech rate had opposite pattern between read and spontaneous speech}
-
-
+%This improvement in performance when score-level fusion was applied can be explained with the complimentary nature of the feature sets. Results for the fusion for other features are not reported since no improvement in performance was observed. A noteworthy point is that across feature sets, fusing with VQual improved the results. 
 
 \begin{table}[t]
 \centering
 
-\caption{\label{tab:outlier_results}Correlation results for the development set with data processing and score fusion. Statistics vector representation for ComParE feature set and i-vector representation for MFCCs and VQual were used. The `+' sign indicates score level fusion. The best performing combination is boldfaced.}
+\caption{\label{tab:results_score_fusion}System performance on the development dataset in terms of Spearman's correlation ($\rho$). Outlier elimination was used prior to sleepiness prediction. Statistics vector representation for ComParE16 and i-vector representation for MFCCs and VQual were used. The `+' sign indicates score level fusion. The best performing combination is boldfaced.}
 
 \begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}l}
 \toprule
@@ -93,6 +79,8 @@ ComParE16+VQual & 0.283\\
 \addlinespace
 ComParE16+MFCCs & 0.296\\
 \addlinespace
+MFCCs+VQual & 0.265\\
+\addlinespace
 ComParE16+MFCCs+VQual &\textbf{0.300} \\
 \addlinespace
  \bottomrule
@@ -100,37 +88,26 @@ ComParE16+MFCCs+VQual &\textbf{0.300} \\
 
 \end{table}
 
-\subsection{Mulit-Level System Performance}
-%We further build upon the single level system by implementing a multi-level system that predicts the sleepiness degree by first classifying the utterance and then doing a regression. 
-The multi-level prediction method was implemented using only the i-vector utterance representation since the overall performance of the system using i-vectors is better than those using statistics vectors. 
-Multi-level prediction results are shown in Table \ref{tab:results_multi_level_system}. 
+\subsection{Performance on the Test Dataset}
 
-Three different combinations of features were tested to implement the prediction. Each feature set -- entropy, Voice Quality and MFCC was used for classification (level 1) and the other two feature sets were used for regression, followed by a score fusion (level 2). The system performance was best when entropy is used for classification and MFCC and VQual were used for regression. 
+Degree of sleepiness was predicted on the test dataset using the complete system on the development dataset. For the test phase, training and development datasets were combined to train the predictor.  %Outlier elimination was performed on this combined data followed by a score level fusion of individual predictors trained using ComParE16, MFCCs and VQual feature sets. 
 
-Interestingly, although entropy did not perform better than other features for single-level prediction, it provided a performance gain when it was used for the classification followed by the regression using other feature sets. 
+The evaluation results of the complete system on development and test datasets are summarized in Table~\ref{tab:results_summary} in comparison to the baseline system. On the test data, the proposed system outperformed the baseline system with an improvement of 5.4\% ($\rho=0.314$ to 0.331). 
 
-In brief, the best performing system was the one which used between-frame changes in entropy for classification followed by regression on VQual and MFCC with score level fusion. With a Spearman's correlation coefficient of 0.269,  our final system was able to achieve a relative improvement of 7.17\% over the baseline. 
-The ComParE 2016 feature set provided with the baseline system had a $\rho$ of 0.251. 
-% The confusion matrix for this is shown in Figure \ref{fig:}.  \Vijay{discussion on confusion matrix}
 
-Speaker and phonetic variability poses a challenge to speaker state recognition~\cite{pisoni1989effects}. These may affect the acoustic variability arising due to the degree of sleepiness of a speaker thereby reducing the performance of sleepiness prediction systems. Bone~\etal~\cite{bone2011intoxicated} suggested the use speaker normalization to detect intoxicated speech.
-
-\begin{table}[t]
+ \begin{table}[h]
 \centering
+\caption{\label{tab:results_summary}Complete system performance in terms of Spearman's correlation on the development and the test set. The baseline system performance using the ComParE16 feature set is also shown for comparison. Statistics vector representation for ComParE16 and i-vector representation for MFCCs  and  VQual  were used. The `+'  sign  indicates  score level fusion.}
 
-\caption{\label{tab:outlier_results}Correlation results for the test set with data processing and score fusion. Statistics vector representation for ComParE feature set and i-vector representation for MFCCs and VQual were used. The `+' sign indicates score level fusion. the baseline system used ComParE16 feature set, as shown in the first row}
-
-\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}l}
+\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}cc}
 \toprule
-\textbf{Feature sets} & \textbf{ $\rho$} \\
-\midrule
-\midrule
-
-ComParE16 & 0.314\\
+ \textbf{} & \textbf{Development} & \textbf{Test} \\
+ \midrule
+ \midrule
+ComParE16 (baseline) & 0.251 & 0.314\\
 \addlinespace
-ComParE16+MFCCs+VQual & \\
+ComParE16+MFCCs+VQual & 0.300 & 0.331\\
 \addlinespace
- \bottomrule
-\end{tabular*}%
-
+\bottomrule
+\end{tabular*}
 \end{table}
