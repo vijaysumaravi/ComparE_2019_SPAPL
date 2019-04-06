@@ -1,0 +1,37 @@
+\section{Database}
+
+\subsection{The Duesseldorf Sleepy Language Corpus}
+
+For the Continuous Sleepiness Sub-Challenge, a subset of the German SLEEP (Duesseldorf Sleepy Language) corpus was chosen~\cite{schullerinterspeech}. Audio files were recorded with 44.1~kHz and down-sampled to 16~kHz, using a 16 bit quantization. The dataset consists of both read speech and spontaneous narrative speech. 
+
+Each participant had to report sleepiness on the well-established Karolinska Sleepiness Scale (KSS, \cite{aakerstedt1990subjective}) with a range of 1 (extremely alert) to 9 (very sleepy). Additionally, two raters assigned post-hoc observer KSS ratings.  The scores from self assessments and the observers are averaged to form the reference sleepiness values. 
+
+% \begin{table}[t]
+% \centering
+% \caption{\label{tab:KSS}Distribution of training and development data among 9 degrees of sleepiness.\Soo{Do we need this table?}}
+
+% \begin{tabular*}{\linewidth}{c@{\extracolsep{\fill}}cc}
+% \toprule
+%  & \multicolumn{2}{c}{\textbf{Number of utterances}} \\
+% \cmidrule{2-3}
+%  \textbf{KSS Rating} & \textbf{Training} & \textbf{Development} \\
+%  \midrule
+%  \midrule
+% 1 & 121 & 61 \\
+% 2 & 430 & 486 \\
+% 3 & 934 & 978 \\
+% 4 & 821 & 724 \\
+% 5 & 816 & 843 \\
+% 6 & 864 & 733 \\
+% 7 & 848 & 664 \\
+% 8 & 612 & 660 \\
+% 9 & 118 & 179 \\
+% \bottomrule
+% \end{tabular*}
+% \end{table}
+
+\subsection{Databases for Training the i-vector Extractor}
+
+Training the UBM and i-vector extractor requires a large database with multiple speakers. Since, we did not have access to any such database in German,
+%Because the amount of data in the SLEEP corpus was not sufficient to train the UBM and i-vector extractor,a separate set of databases was used for this purpose. in this study, 
+the NIST SRE 04, 05, 06, and 08 databases~\cite{alvin2004nist,przybocki2006nist,martin2009nist} and the Switchboard II corpus phase 2 data~\cite{graff1999switchboard} were used. These databases provide more than 3,000 hours of speech samples from 3,408 female and 1,832 male talkers. These databases are sampled at 8~kHz. %The databases are chosen to provide a large number of speakers to train the i-vector system which compensates for speaker variability~\cite{dehak2011front}. 

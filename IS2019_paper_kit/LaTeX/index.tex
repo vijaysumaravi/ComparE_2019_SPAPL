@@ -1,0 +1,82 @@
+\documentclass[a4paper]{article}
+
+\usepackage{INTERSPEECH2019}
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{pifont}
+% Please add the following required packages to your document preamble:
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% SHOW COMMENTS
+\newcommand{\Soo}[1]{\textcolor{magenta}{[Soo: #1]}}
+\newcommand{\Vijay}[1]{\textcolor{green}{[Vijay: #1]}}
+\newcommand{\Amber}[1]{\textcolor{red}{[Amber: #1]}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% DON'T SHOW COMMENTS
+% \newcommand{\Soo}[1]{}
+% \newcommand{\Vijay}[1]{}
+% \newcommand{\Amber}[1]{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \doublespacing
+\usepackage{amsmath}
+\DeclareMathOperator{\Tr}{\textbf{Tr}}
+\newcommand{\etal}{\textit{et al}.}
+
+\title{Voice Quality and Change in Entropy for Sleepiness Estimation}
+\name{Vijay Ravi, Soo Jin Park, Amber Afshan and Abeer Alwan}
+%The maximum number of authors in the author list is twenty. If the number of contributing authors is more than twenty, they should be listed in a footnote or in acknowledgement section, as appropriate.
+\address{Electrical and Computer Engineering Department, University of California Los Angeles, USA}
+\email{vijaysumaravi@ucla.edu, sj.park@ucla.edu, amberafshan@g.ucla.edu, alwan@g.ucla.edu}
+
+\begin{document}
+
+\maketitle
+% 
+\begin{abstract}
+Sleepiness monitoring and prediction has many potential applications, such as being a safety feature in driver-assistance systems. In this study, we address the ComparE 2019 Continuous Sleepiness task of estimating the sleepiness degree from speech signals. Voice quality features and between-frame changes in entropy are proposed to capture acoustic characteristics related to the sleepiness state of a speaker. Voice quality is often associated with a speaker's physical and emotional state. Frame-level changes in entropy can be considered as indirect measures of speaking rate. We also propose a multi-level prediction strategy. In the first level, a support vector classifier was trained using a vector of entropy statistics. For best results, utterances were classified into three classes -- low, moderate and high degrees of sleepiness. In the second level, utterances were represented using i-vectors computed from voice quality features. Three support vector regression models were used, one for each class, to predict sleepiness degree. For the second level, a similar system was also developed using mel-frequency-cepstral-coefficients features. The two second-level systems were combined using score-level fusion resulting in an overall improvement of 7.17\% over the baseline support vector regression using the ComParE16 feature set.  
+\end{abstract}
+\vspace{2mm}
+
+\noindent\textbf{Index Terms}:  voice quality, computational paralinguistics  \Soo{Need to decide these}
+
+\input{IS2019_paper_kit/LaTeX/section_Intro.tex} %INTRODUCTION
+\input{IS2019_paper_kit/LaTeX/section_Database.tex} %Acoustic Features
+\input{IS2019_paper_kit/LaTeX/section_Features.tex} %Mulitlevel Prediction
+\input{IS2019_paper_kit/LaTeX/section_Method.tex} %Experimental Results
+\input{IS2019_paper_kit/LaTeX/section_Results.tex} %Conclusion
+\input{IS2019_paper_kit/LaTeX/section_Conclusion.tex} %Conclusion
+
+
+
+
+%\section{Acknowledgements}
+% \section{References}
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{references}
+
+% \begin{thebibliography}{9}
+% \bibitem[1]{Davis80-COP}
+%   S.\ B.\ Davis and P.\ Mermelstein,
+%   ``Comparison of parametric representation for monosyllabic word recognition in continuously spoken sentences,''
+%   \textit{IEEE Transactions on Acoustics, Speech and Signal Processing}, vol.~28, no.~4, pp.~357--366, 1980.
+% \bibitem[2]{Rabiner89-ATO}
+%   L.\ R.\ Rabiner,
+%   ``A tutorial on hidden Markov models and selected applications in speech recognition,''
+%   \textit{Proceedings of the IEEE}, vol.~77, no.~2, pp.~257-286, 1989.
+% \bibitem[3]{Hastie09-TEO}
+%   T.\ Hastie, R.\ Tibshirani, and J.\ Friedman,
+%   \textit{The Elements of Statistical Learning -- Data Mining, Inference, and Prediction}.
+%   New York: Springer, 2009.
+% \bibitem[4]{YourName17-XXX}
+%   F.\ Lastname1, F.\ Lastname2, and F.\ Lastname3,
+%   ``Title of your INTERSPEECH 2019 publication,''
+%   in \textit{Interspeech 2019 -- 20\textsuperscript{th} Annual Conference of the International Speech Communication Association, September 15-19, Graz, Austria, Proceedings, Proceedings}, 2019, pp.~100--104.
+% \end{thebibliography}
+
+\end{document}
